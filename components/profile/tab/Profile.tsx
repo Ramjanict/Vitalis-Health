@@ -3,6 +3,7 @@
 import CommonButton from "@/components/common/button/CommonButton";
 import CommonBorder from "@/components/common/custom/CommonBorder";
 import CommonHeader from "@/components/common/header/CommonHeader";
+import Image from "next/image";
 import { useRef, useState } from "react";
 import { FiMail } from "react-icons/fi";
 import { LuPhone, LuUser } from "react-icons/lu";
@@ -54,7 +55,7 @@ const Profile = ({ handleCancel }: { handleCancel: () => void }) => {
       <CommonBorder size="sm" className=" flex items-center  gap-4">
         <div className="w-12 h-12 bg-[#030213] rounded-full flex items-center justify-center overflow-hidden">
           {preview ? (
-            <img
+            <Image
               src={preview}
               alt="Profile Preview"
               className="w-full h-full object-cover"

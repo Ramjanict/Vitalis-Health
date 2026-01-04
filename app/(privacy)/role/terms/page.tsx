@@ -1,6 +1,6 @@
 const page = () => {
   return (
-    <div className="">
+    <div className="max-w-4xl mx-auto  p-6 text-gray-800">
       <h1 className="text-3xl font-bold mb-2">Terms & Conditions — Vitalyze</h1>
       <p className="text-sm text-gray-500 mb-6">Effective Date: 10.11.2025</p>
 

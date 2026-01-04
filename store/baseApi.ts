@@ -1,50 +1,75 @@
 import {
-  createApi,
-  fetchBaseQuery,
-  FetchArgs,
-  FetchBaseQueryError,
   BaseQueryApi,
+  createApi,
+  FetchArgs,
+  fetchBaseQuery,
+  FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
 import { toast } from "react-toastify";
 
+interface ApiResponseMessage {
+  message?: string;
+}
+
+// Typed baseQuery
 const baseQuery = fetchBaseQuery({
-  baseUrl: process.env.NEXT_PUBLIC_API_URL || "https://api.example.com",
-  prepareHeaders: (headers) => {
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      if (token) headers.set("Authorization", `Bearer ${token}`);
+  baseUrl:
+    process.env.NEXT_PUBLIC_API_URL ||
+    "https://wellness-backend-3.onrender.com",
+  prepareHeaders: (headers, { getState }) => {
+    const token = (getState() as { auth?: { token?: string } })?.auth?.token;
+    if (token) {
+      headers.set("authorization", `Bearer ${token}`);
     }
-    headers.set("Content-Type", "application/json");
     return headers;
   },
 });
 
-const baseQueryWithErrorHandling = async (
-  args: string | FetchArgs,
+// Extra options type for skipToast
+interface BaseQueryExtraOptions {
+  skipToast?: boolean;
+}
+
+const baseQueryWithToast = async (
+  args: string | (FetchArgs & { skipToast?: boolean }),
   api: BaseQueryApi,
-  extraOptions: any
+  extraOptions: BaseQueryExtraOptions = {}
 ) => {
+  const skipToast =
+    extraOptions.skipToast ??
+    (typeof args === "object" ? args.skipToast : false);
+
   const result = await baseQuery(args, api, extraOptions);
 
-  if (result.error) {
-    const status = result.error?.status;
+  const method =
+    typeof args === "object" && "method" in args
+      ? args.method?.toUpperCase()
+      : "GET";
 
-    if (status === 401) {
-      toast.error("Session expired. Please log in again.");
-      localStorage.removeItem("token");
-      if (typeof window !== "undefined") window.location.href = "/login";
-    } else if (status === 500) {
-      toast.error("Server error. Please try again later.");
-    }
+  if (
+    !skipToast &&
+    result.data &&
+    ["POST", "PUT", "DELETE", "PATCH"].includes(method ?? "")
+  ) {
+    const message = (result.data as ApiResponseMessage)?.message;
+    if (message) toast.success(message);
+  }
+
+  if (result.error) {
+    const errorData = result.error as FetchBaseQueryError & {
+      data?: ApiResponseMessage;
+    };
+    const message = errorData.data?.message || "Something went wrong!";
+    toast.error(message);
   }
 
   return result;
 };
 
-// ✅ Base API definition
+// Base API
 export const baseApi = createApi({
-  reducerPath: "api",
-  baseQuery: baseQueryWithErrorHandling,
-  tagTypes: ["Auth", "User", "Post", "Product"], // Optional tags for caching
+  reducerPath: "baseApi",
+  baseQuery: baseQueryWithToast,
   endpoints: () => ({}),
+  tagTypes: ["user", "Session"],
 });

@@ -1,6 +1,8 @@
 "use client";
+import { removeToken } from "@/store/auth/AuthState";
 import React, { useState } from "react";
 import { LuLogOut } from "react-icons/lu";
+import { useDispatch } from "react-redux";
 import ButtonWithIcon from "../common/button/ButtonWithIcon";
 import CommonBorder from "../common/custom/CommonBorder";
 import CommonHeader from "../common/header/CommonHeader";
@@ -21,6 +23,11 @@ const AdminProfile: React.FC<GeneralSettingsForm> = ({ setIsOpen }) => {
     setIsOpen(false);
   };
 
+  const dispatch = useDispatch();
+  const handleSignOut = () => {
+    dispatch(removeToken());
+    setIsOpen(false);
+  };
   return (
     <CommonBorder size="sm" shadow className="max-w-[512px] relative ">
       <div className=" w-fit ml-auto absolute top-1 right-2.5 ">
@@ -52,7 +59,7 @@ const AdminProfile: React.FC<GeneralSettingsForm> = ({ setIsOpen }) => {
 
       <div className=" flex justify-between items-center border-t-[1.73px] border-border pt-8">
         <ButtonWithIcon
-          onClick={handleCancel}
+          onClick={handleSignOut}
           icon={LuLogOut}
           className="!px-4 !py-2 !bg-[#D4183D] !text-white "
           iconClassName=" !text-white"

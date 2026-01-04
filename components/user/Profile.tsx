@@ -3,6 +3,7 @@ import { BsPhone } from "react-icons/bs";
 import { FiCalendar, FiMail } from "react-icons/fi";
 import CommonButton from "../common/button/CommonButton";
 import CommonHeader from "../common/header/CommonHeader";
+import { timeAgo } from "../help";
 import { Badge } from "../ui/badge";
 
 export interface User {
@@ -130,7 +131,7 @@ const Profile: React.FC<Props> = ({ user }) => {
               </div>
 
               <CommonHeader size="md" className="">
-                {item.value}
+                {timeAgo(item.value || "")}
               </CommonHeader>
             </div>
           </div>

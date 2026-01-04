@@ -1,27 +1,16 @@
 import { baseApi } from "../baseApi";
+import { LoginApiResponse, LoginPayload } from "./types/login";
 
-export const authApi = baseApi.injectEndpoints({
+const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    loginUser: builder.mutation<
-      { token: string; user: { id: string; email: string } },
-      { email: string; password: string }
-    >({
-      query: (body) => ({
+    login: builder.mutation<LoginApiResponse, LoginPayload>({
+      query: (credentials) => ({
         url: "/auth/login",
         method: "POST",
-        body,
+        body: credentials,
       }),
-      invalidatesTags: ["Auth"],
-    }),
-
-    getProfile: builder.query<{ id: string; email: string }, void>({
-      query: () => ({
-        url: "/auth/profile",
-        method: "GET",
-      }),
-      providesTags: ["Auth"],
     }),
   }),
 });
 
-export const { useLoginUserMutation, useGetProfileQuery } = authApi;
+export const { useLoginMutation } = authApi;

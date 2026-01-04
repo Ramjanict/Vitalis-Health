@@ -1,3 +1,4 @@
+import { AdminUser } from "@/store/user/types/user";
 import React, { useState } from "react";
 import CommonBorder from "../common/custom/CommonBorder";
 import CommonHeader from "../common/header/CommonHeader";
@@ -6,11 +7,10 @@ import CommonTabs from "../reuseable/CommonTabs";
 import Activity from "./Activity";
 import Health from "./Health";
 import Profile from "./Profile";
-import { User } from "./UsersTable";
 
 interface Props {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-  user: User | null;
+  user: AdminUser | null;
 }
 type tabType = "profile" | "health" | "activity";
 const UserModal: React.FC<Props> = ({ setOpenModal, user }) => {

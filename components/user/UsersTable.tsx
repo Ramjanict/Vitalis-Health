@@ -1,63 +1,14 @@
 "use client";
-import { Eye } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import CommonButton from "@/components/common/button/CommonButton";
 import CommonBorder from "@/components/common/custom/CommonBorder";
 import CommonHeader from "@/components/common/header/CommonHeader";
-import CommonButton from "@/components/common/button/CommonButton";
+import { Badge } from "@/components/ui/badge";
+import { AdminUser } from "@/store/user/types/user";
+import { useGetAllUsersQuery } from "@/store/user/userManagementApi";
+import { Eye } from "lucide-react";
 import { useState } from "react";
+import { timeAgo } from "../help";
 import UserModal from "./UserModal";
-
-export interface User {
-  name: string;
-  email: string;
-  status: "active" | "inactive";
-  devices: string;
-  joinDate: string;
-  lastActive: string;
-}
-
-const users: User[] = [
-  {
-    name: "John Doe",
-    email: "john@example.com",
-    status: "active",
-    devices: "Apple Watch",
-    joinDate: "2024-01-15",
-    lastActive: "2 hours ago",
-  },
-  {
-    name: "Sarah Smith",
-    email: "sarah@example.com",
-    status: "active",
-    devices: "Fitbit",
-    joinDate: "2024-02-20",
-    lastActive: "1 day ago",
-  },
-  {
-    name: "Mike Johnson",
-    email: "mike@example.com",
-    status: "inactive",
-    devices: "Google Fit",
-    joinDate: "2023-12-10",
-    lastActive: "2 weeks ago",
-  },
-  {
-    name: "Emily Brown",
-    email: "emily@example.com",
-    status: "active",
-    devices: "Apple Watch",
-    joinDate: "2024-03-05",
-    lastActive: "5 min ago",
-  },
-  {
-    name: "David Lee",
-    email: "david@example.com",
-    status: "active",
-    devices: "Fitbit",
-    joinDate: "2024-01-28",
-    lastActive: "3 hours ago",
-  },
-];
 
 const tableHeaders = [
   { label: "Name" },
@@ -77,12 +28,18 @@ const tableData = {
 };
 export default function UsersTable() {
   const [openModal, setOpenModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
 
-  const handleOpenModal = (user: User) => {
+  const handleOpenModal = (user: AdminUser) => {
     setSelectedUser(user);
     setOpenModal(true);
   };
+  const [page] = useState(1);
+  const [limit] = useState(10);
+
+  const { data } = useGetAllUsersQuery({ page, limit });
+
+  const users = data?.data.data || [];
 
   return (
     <>
@@ -131,8 +88,8 @@ export default function UsersTable() {
                       {user.devices}
                     </CommonButton>
                   </td>
-                  <td className={tableData.td}>{user.joinDate}</td>
-                  <td className={tableData.td}>{user.lastActive}</td>
+                  <td className={tableData.td}>{timeAgo(user.joinDate)}</td>
+                  <td className={tableData.td}>{timeAgo(user.lastActive)}</td>
                   <td className={` ${tableData.td} text-center`}>
                     <button
                       onClick={() => handleOpenModal(user)}
