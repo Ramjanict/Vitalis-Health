@@ -29,4 +29,6 @@ export type AdminUsersResponse = {
 export type UserParams = {
   page?: number;
   limit?: number;
+  status?: "active" | "inactive";
+  search?: string;
 };

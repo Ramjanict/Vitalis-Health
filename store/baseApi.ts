@@ -71,5 +71,5 @@ export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithToast,
   endpoints: () => ({}),
-  tagTypes: ["user", "Session"],
+  tagTypes: ["user", "dashboard"],
 });

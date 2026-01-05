@@ -1,5 +1,6 @@
 "use client";
 import { removeToken } from "@/store/auth/AuthState";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { LuLogOut } from "react-icons/lu";
 import { useDispatch } from "react-redux";
@@ -19,6 +20,7 @@ interface GeneralSettingsForm {
 type tabType = "profile" | "security" | "preferences";
 const AdminProfile: React.FC<GeneralSettingsForm> = ({ setIsOpen }) => {
   const [tab, setTab] = useState<tabType>("profile");
+  const router = useRouter();
   const handleCancel = () => {
     setIsOpen(false);
   };
@@ -27,7 +29,9 @@ const AdminProfile: React.FC<GeneralSettingsForm> = ({ setIsOpen }) => {
   const handleSignOut = () => {
     dispatch(removeToken());
     setIsOpen(false);
+    router.replace("/login");
   };
+
   return (
     <CommonBorder size="sm" shadow className="max-w-[512px] relative ">
       <div className=" w-fit ml-auto absolute top-1 right-2.5 ">

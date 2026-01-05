@@ -56,7 +56,6 @@ const DashboardCard: FC<CardProps> = ({ data }) => {
                 trend.isPositive ? "text-[#08AD36]" : "text-red-500"
               }`}
             >
-              {trend.isPositive ? "+" : "-"}
               {trend.percentage}
             </CommonHeader>
             <CommonHeader size="xs">from last month</CommonHeader>

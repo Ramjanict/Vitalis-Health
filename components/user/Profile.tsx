@@ -1,3 +1,4 @@
+import { SingleUserResponse } from "@/store/user/types/singleUser";
 import React from "react";
 import { BsPhone } from "react-icons/bs";
 import { FiCalendar, FiMail } from "react-icons/fi";
@@ -16,7 +17,7 @@ export interface User {
 }
 
 interface Props {
-  user: User | null;
+  user: SingleUserResponse | null;
 }
 
 const Profile: React.FC<Props> = ({ user }) => {
@@ -24,7 +25,7 @@ const Profile: React.FC<Props> = ({ user }) => {
     {
       icon: <FiMail className="text-gray-500 w-4 h-4" />,
       label: "Email",
-      value: user?.email,
+      value: user?.data.email,
     },
     {
       icon: <BsPhone className="text-gray-500 w-4 h-4" />,
@@ -35,20 +36,20 @@ const Profile: React.FC<Props> = ({ user }) => {
 
   const personalInfo = [
     { label: "Age", value: "25 years" },
-    { label: "Gender", value: "Male" },
-    { label: "Height", value: `5'10"` },
-    { label: "Weight", value: "150 lbs" },
+    { label: "Gender", value: user?.data.profile.gender || "Not Specified" },
+    { label: "Height", value: user?.data.profile.height || "5'9\"" },
+    { label: "Weight", value: user?.data.profile.weight || "160 lbs" },
   ];
 
   const dateInfo = [
     {
       icon: <FiCalendar className="text-gray-500" />,
       label: "Join Date",
-      value: user?.joinDate,
+      value: user?.data.createdAt,
     },
     {
       label: "Last Active",
-      value: user?.lastActive,
+      value: user?.data.lastActive,
     },
   ];
 
@@ -61,7 +62,7 @@ const Profile: React.FC<Props> = ({ user }) => {
             Full Name
           </CommonHeader>
           <CommonHeader size="md" className="">
-            {user?.name}
+            {user?.data.profile.fullName}
           </CommonHeader>
         </div>
         <div className="space-y-2">
@@ -69,7 +70,7 @@ const Profile: React.FC<Props> = ({ user }) => {
             Status
           </CommonHeader>
           <Badge className="block bg-[#030213] text-white rounded-xl px-2 py-1 ">
-            {user?.status}
+            {user?.data.status}
           </Badge>
         </div>
       </div>
@@ -114,7 +115,7 @@ const Profile: React.FC<Props> = ({ user }) => {
           Connected Devices
         </CommonHeader>
         <CommonButton variant="secondary" className="block">
-          {user?.devices}
+          {user?.data.devices}
         </CommonButton>
       </div>
 

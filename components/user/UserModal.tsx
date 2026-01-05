@@ -1,4 +1,4 @@
-import { AdminUser } from "@/store/user/types/user";
+import { SingleUserResponse } from "@/store/user/types/singleUser";
 import React, { useState } from "react";
 import CommonBorder from "../common/custom/CommonBorder";
 import CommonHeader from "../common/header/CommonHeader";
@@ -10,11 +10,14 @@ import Profile from "./Profile";
 
 interface Props {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-  user: AdminUser | null;
+  user: SingleUserResponse | null;
 }
 type tabType = "profile" | "health" | "activity";
 const UserModal: React.FC<Props> = ({ setOpenModal, user }) => {
   const [tab, setTab] = useState<tabType>("profile");
+
+  const profileData = user?.data.profile;
+
   return (
     <CommonBorder shadow size="md" className=" max-w-2xl  relative">
       <>
@@ -27,7 +30,7 @@ const UserModal: React.FC<Props> = ({ setOpenModal, user }) => {
         </CommonHeader>
 
         <CommonHeader size="sm" className="pt-2 !text-[#717182]">
-          Comprehensive information about {user?.name}
+          Comprehensive information about {profileData?.fullName}
         </CommonHeader>
       </>
       <CommonTabs<tabType>
