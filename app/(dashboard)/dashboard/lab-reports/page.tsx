@@ -1,3 +1,4 @@
+"use client";
 import CommonSpace from "@/components/common/space/CommonSpace";
 import CommonSpaceBottom from "@/components/common/space/CommonSpaceBottom";
 import LabCardSection from "@/components/report/LabCardSection";
@@ -6,9 +7,10 @@ import DashboardSearch from "@/components/reuseable/DashboardSearch";
 import React from "react";
 
 const page = () => {
+  const [search, setSearch] = React.useState("");
   return (
     <div>
-      <DashboardSearch />
+      <DashboardSearch value={search} onChange={setSearch} />
       <CommonSpace>
         <LabCardSection />
       </CommonSpace>
