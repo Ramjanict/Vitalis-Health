@@ -6,7 +6,6 @@
 [![GitHub Repository](https://img.shields.io/badge/GitHub-Ramjanict%2FVitalis--Health-181717?style=for-the-badge&logo=github)](https://github.com/Ramjanict/Vitalis-Health)
 
 - 🌐 **Live Demo:** [https://surajashray-ten.vercel.app](https://surajashray-ten.vercel.app)
-- 💻 **Source Code:** [https://github.com/Ramjanict/Vitalis-Health](https://github.com/Ramjanict/Vitalis-Health)
 
 ---
 
