@@ -2,20 +2,26 @@
 
 > An enterprise-grade, responsive healthcare and wellness management dashboard built with **Next.js 16**, **React 19**, **Tailwind CSS**, and **Redux Toolkit**. Delivers comprehensive patient monitoring, wearable device integrations, AI health companion logs, nutrition database tracking, and proactive wellness nudges.
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-surajashray--ten.vercel.app-2ea44f?style=for-the-badge&logo=vercel)](https://surajashray-ten.vercel.app)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Ramjanict%2FVitalis--Health-181717?style=for-the-badge&logo=github)](https://github.com/Ramjanict/Vitalis-Health)
+
+- 🌐 **Live Demo:** [https://surajashray-ten.vercel.app](https://surajashray-ten.vercel.app)
+- 💻 **Source Code:** [https://github.com/Ramjanict/Vitalis-Health](https://github.com/Ramjanict/Vitalis-Health)
+
 ---
 
 ## 🌟 Visual Preview
 
-![Vitalis Dashboard Hero](/images/dashboard-hero.jpg)
+![Vitalis Dashboard Hero](https://raw.githubusercontent.com/Ramjanict/Vitalis-Health/main/public/images/dashboard-hero.jpg)
 
 <p align="center">
-  <img src="/images/health-vitals.jpg" width="48%" alt="Health Vitals Monitoring" />
-  <img src="/images/ai-wellness-assistant.jpg" width="48%" alt="AI Wellness Assistant" />
+  <img src="https://raw.githubusercontent.com/Ramjanict/Vitalis-Health/main/public/images/health-vitals.jpg" width="48%" alt="Health Vitals Monitoring" />
+  <img src="https://raw.githubusercontent.com/Ramjanict/Vitalis-Health/main/public/images/ai-wellness-assistant.jpg" width="48%" alt="AI Wellness Assistant" />
 </p>
 
 <p align="center">
-  <img src="/images/nutrition-scanner.jpg" width="48%" alt="Nutrition Scanner" />
-  <img src="/images/wellness-nudges.jpg" width="48%" alt="Wellness Nudges" />
+  <img src="https://raw.githubusercontent.com/Ramjanict/Vitalis-Health/main/public/images/nutrition-scanner.jpg" width="48%" alt="Nutrition Scanner" />
+  <img src="https://raw.githubusercontent.com/Ramjanict/Vitalis-Health/main/public/images/wellness-nudges.jpg" width="48%" alt="Wellness Nudges" />
 </p>
 
 ---
@@ -139,8 +145,8 @@ Ensure you have **Node.js 18+** or **Node.js 20+** installed.
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/softvence-omega-future-stack/surajashray.git
-   cd surajashray
+   git clone https://github.com/Ramjanict/Vitalis-Health.git
+   cd Vitalis-Health
    ```
 
 2. **Install dependencies:**
