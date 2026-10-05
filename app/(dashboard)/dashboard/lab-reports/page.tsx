@@ -6,7 +6,7 @@ import LabReport from "@/components/report/LabReport";
 import DashboardSearch from "@/components/reuseable/DashboardSearch";
 import React from "react";
 
-const page = () => {
+const LabReportsPage = () => {
   const [search, setSearch] = React.useState("");
   return (
     <div>
@@ -21,4 +21,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default LabReportsPage;

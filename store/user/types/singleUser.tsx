@@ -42,14 +42,14 @@ export interface User {
   deviceIntegration: DeviceIntegration | null;
   notificationSettings: NotificationSettings;
 
-  nudges: any[];
-  meals: any[];
-  labReports: any[];
-  MedicalReports: any[];
-  conversations: any[];
-  HealthDatas: any[];
-  chats: any[];
-  devices: any[];
+  nudges: unknown[];
+  meals: unknown[];
+  labReports: unknown[];
+  MedicalReports: unknown[];
+  conversations: unknown[];
+  HealthDatas: unknown[];
+  chats: unknown[];
+  devices: string[] | string;
 }
 
 // Profile
@@ -82,7 +82,7 @@ export interface NotificationSettings {
 }
 
 // Device integration (empty in response, kept flexible)
-export type DeviceIntegration = Record<string, any>;
+export type DeviceIntegration = Record<string, unknown>;
 
 // singleUser payload for update
 export interface UpdateUserRequest {

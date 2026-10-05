@@ -1,12 +1,12 @@
 "use client";
 
-import { useGetDashboardStartQuery } from "@/store/dashboard/dashboardApi";
+import { mockDashboardStats } from "@/lib/mockData";
 import { FiActivity } from "react-icons/fi";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import { LuUsers } from "react-icons/lu";
 import { MdChatBubbleOutline } from "react-icons/md";
-import DashboardCardSkeleton from "../common/custom/DashboardCardSkeleton";
 import DashBoardCard from "../reuseable/DashBoardCard";
+
 export const loadingList = new Array(4).fill(null);
 const isPositiveChange = (change?: string) =>
   change?.trim().startsWith("+") ?? false;
@@ -14,8 +14,7 @@ const isPositiveChange = (change?: string) =>
 const extractPercentage = (change?: string) => change?.split(" ")[0] ?? "0%";
 
 const TopSectionCard = () => {
-  const { data, isLoading } = useGetDashboardStartQuery();
-  const dashboardData = data?.data;
+  const dashboardData = mockDashboardStats;
 
   const cardData = [
     {
@@ -58,9 +57,9 @@ const TopSectionCard = () => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {isLoading
-        ? loadingList.map((_, idx) => <DashboardCardSkeleton key={idx} />)
-        : cardData.map((stat, idx) => <DashBoardCard key={idx} data={stat} />)}
+      {cardData.map((stat, idx) => (
+        <DashBoardCard key={idx} data={stat} />
+      ))}
     </div>
   );
 };

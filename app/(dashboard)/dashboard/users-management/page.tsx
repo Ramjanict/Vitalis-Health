@@ -10,7 +10,7 @@ export const statusOptions = [
   { label: "Active", value: "active" },
   { label: "Inactive", value: "inactive" },
 ] as const;
-const page = () => {
+const UsersManagementPage = () => {
   const [status, setStatus] =
     useState<(typeof statusOptions)[number]["value"]>("all");
   const [search, setSearch] = useState("");
@@ -30,4 +30,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default UsersManagementPage;

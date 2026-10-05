@@ -3,12 +3,12 @@ import CommonButton from "@/components/common/button/CommonButton";
 import CommonBorder from "@/components/common/custom/CommonBorder";
 import CommonHeader from "@/components/common/header/CommonHeader";
 import { Badge } from "@/components/ui/badge";
-import { UpdateUserRequest } from "@/store/user/types/singleUser";
 import {
-  useDeleteSingleUserMutation,
-  useGetAllUsersQuery,
-  useGetSingleUserQuery,
-} from "@/store/user/userManagementApi";
+  deleteMockUserInStore,
+  getMockSingleUser,
+  useMockUsers,
+} from "@/lib/mockData";
+import { UpdateUserRequest } from "@/store/user/types/singleUser";
 import { Edit, Eye } from "lucide-react";
 import { useState } from "react";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -16,10 +16,10 @@ import { toast } from "react-toastify";
 import AlertDialogBox from "../common/custom/AlertDialogBox";
 import LoadingStatus from "../common/custom/LoadingStatus";
 import Pagination from "../common/custom/Pagination";
-import Spinner from "../common/custom/Spinner";
 import { timeAgo } from "../help";
 import UserModal from "./UserModal";
 import UserProfileModal from "./UserProfileModal";
+
 const tableHeaders = [
   { label: "Name" },
   { label: "Email" },
@@ -36,10 +36,12 @@ const tableData = {
   tbody: "border-b-[1.73px] border-border last:border-0",
   td: "py-3 px-4",
 };
+
 interface IUsersTableProps {
   status: "all" | "active" | "inactive";
   search: string;
 }
+
 export default function UsersTable({ status, search }: IUsersTableProps) {
   const [openModal, setOpenModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -48,68 +50,63 @@ export default function UsersTable({ status, search }: IUsersTableProps) {
     setSelectedUserId(userId);
     setOpenModal(true);
   };
-  const statusParam = status === "all" ? undefined : status;
+
   const [page, setPage] = useState(1);
   const limit = 10;
 
-  const { data, isLoading } = useGetAllUsersQuery(
-    {
-      page,
-      limit,
-      status: statusParam,
-      search: search || undefined,
-    },
-    { refetchOnMountOrArgChange: true }
-  );
+  const allUsers = useMockUsers();
 
-  const users = data?.data.data || [];
+  const filteredUsers = allUsers.filter((user) => {
+    const matchesStatus =
+      status === "all" ? true : user.status === status;
+    const matchesSearch = search
+      ? user.name.toLowerCase().includes(search.toLowerCase()) ||
+        user.email.toLowerCase().includes(search.toLowerCase())
+      : true;
+    return matchesStatus && matchesSearch;
+  });
 
-  const { data: singleUser, isLoading: isSingleUserLoading } =
-    useGetSingleUserQuery(selectedUserId || "", {
-      skip: !selectedUserId,
-      refetchOnMountOrArgChange: true,
-    });
+  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / limit));
+  const users = filteredUsers.slice((page - 1) * limit, page * limit);
+
+  const singleUser = selectedUserId ? getMockSingleUser(selectedUserId) : null;
 
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [selectedProfileUser, setSelectedProfileUser] =
     useState<UpdateUserRequest | null>(null);
 
-  const handleEditProfile = (selectedUserId: string) => {
-    setSelectedUserId(selectedUserId);
-    if (singleUser && selectedUserId) {
+  const handleEditProfile = (userId: string) => {
+    setSelectedUserId(userId);
+    const targetUser = getMockSingleUser(userId);
+    if (targetUser) {
       setSelectedProfileUser({
         role: "USER",
         profile: {
-          fullName: singleUser?.data.profile.fullName,
-          gender: singleUser?.data.profile.gender || "",
-          height: singleUser?.data.profile.height || 0,
-          weight: singleUser?.data.profile.weight || 0,
-          language: singleUser?.data.profile.language,
-          healthGoal: singleUser?.data.profile.healthGoal || "",
+          fullName: targetUser.data.profile.fullName,
+          gender: targetUser.data.profile.gender || "",
+          height: targetUser.data.profile.height || 0,
+          weight: targetUser.data.profile.weight || 0,
+          language: targetUser.data.profile.language,
+          healthGoal: targetUser.data.profile.healthGoal || "",
         },
       });
     }
     setProfileModalOpen(true);
   };
-  const [deleteSingleUser, { isLoading: isDeleting }] =
-    useDeleteSingleUserMutation();
+
   const handleDeleteUser = async (userId: string) => {
-    try {
-      await deleteSingleUser(userId);
-      toast.success("User soft-deleted successfully");
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
+    deleteMockUserInStore(userId);
+    toast.success("User soft-deleted successfully");
   };
 
   return (
     <>
       <CommonBorder>
         <CommonHeader size="md" className="pb-7.5">
-          All Users ({users.length})
+          All Users ({filteredUsers.length})
         </CommonHeader>
-        {<LoadingStatus isLoading={isLoading} items={users} itemName="users" />}
-        {!isLoading && users.length > 0 && (
+        <LoadingStatus isLoading={false} items={users} itemName="users" />
+        {users.length > 0 && (
           <div className="overflow-x-auto">
             <table className={tableData.table}>
               <thead>
@@ -169,7 +166,7 @@ export default function UsersTable({ status, search }: IUsersTableProps) {
 
                         <AlertDialogBox
                           action={() => handleDeleteUser(user.id)}
-                          isLoading={isDeleting}
+                          isLoading={false}
                           trigger={
                             <button className="  cursor-pointer">
                               <RiDeleteBin5Line className="w-4 h-4" />
@@ -191,22 +188,15 @@ export default function UsersTable({ status, search }: IUsersTableProps) {
       <div className="py-10">
         <Pagination
           currentPage={page}
-          totalPages={data?.data.meta.total || 1}
+          totalPages={totalPages}
           onPageChange={(newPage) => setPage(newPage)}
         />
       </div>
 
-      {isSingleUserLoading ? (
+      {openModal && singleUser && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 ">
-          <Spinner />
+          <UserModal setOpenModal={setOpenModal} user={singleUser} />
         </div>
-      ) : (
-        openModal &&
-        singleUser && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 ">
-            <UserModal setOpenModal={setOpenModal} user={singleUser} />
-          </div>
-        )
       )}
 
       {profileModalOpen && selectedUserId && selectedProfileUser && (

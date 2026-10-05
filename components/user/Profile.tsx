@@ -115,7 +115,9 @@ const Profile: React.FC<Props> = ({ user }) => {
           Connected Devices
         </CommonHeader>
         <CommonButton variant="secondary" className="block">
-          {user?.data.devices}
+          {Array.isArray(user?.data.devices)
+            ? user.data.devices.join(", ")
+            : user?.data.devices}
         </CommonButton>
       </div>
 

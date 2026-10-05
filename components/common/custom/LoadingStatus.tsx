@@ -2,7 +2,7 @@ import TableLoading from "./TableLoading";
 
 type ListStatusProps = {
   isLoading: boolean;
-  items?: any[];
+  items?: unknown[];
   itemName?: string;
 };
 

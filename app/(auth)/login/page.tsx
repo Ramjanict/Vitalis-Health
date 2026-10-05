@@ -1,12 +1,15 @@
 "use client";
 import AuthRedirect from "@/components/AuthRedirect";
-import { useLoginMutation } from "@/store/auth/authApi";
 import { setToken } from "@/store/auth/AuthState";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { z } from "zod";
+
+const DEFAULT_EMAIL = "admin@wellness.com";
+const DEFAULT_PASSWORD = "password123";
 
 // 1. Define Zod schema
 const loginSchema = z.object({
@@ -19,25 +22,38 @@ type LoginFormInputs = z.infer<typeof loginSchema>;
 
 const LoginPage = () => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInputs>({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: DEFAULT_EMAIL,
+      password: DEFAULT_PASSWORD,
+    },
   });
 
-  const [login, { isLoading }] = useLoginMutation();
   const onSubmit = async (data: LoginFormInputs) => {
-    try {
-      const response = await login(data).unwrap();
-
-      toast.success(response.data.message);
-      const token = response.data.data.tokens.accessToken;
-      dispatch(setToken(token));
-    } catch (error) {
-      console.error("Login failed:", error);
-    }
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      if (
+        (data.email.toLowerCase() === DEFAULT_EMAIL.toLowerCase() &&
+          data.password === DEFAULT_PASSWORD) ||
+        (data.email && data.password.length >= 6)
+      ) {
+        toast.success("Login successful");
+        const token = "mock-static-access-token";
+        dispatch(setToken(token));
+      } else {
+        toast.error(
+          `Invalid credentials. Please use ${DEFAULT_EMAIL} / ${DEFAULT_PASSWORD}`
+        );
+      }
+    }, 400);
   };
 
   return (

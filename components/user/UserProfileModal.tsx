@@ -1,7 +1,7 @@
 "use client";
 
+import { updateMockUserInStore } from "@/lib/mockData";
 import { UpdateUserRequest } from "@/store/user/types/singleUser";
-import { useUpdateSingleUserMutation } from "@/store/user/userManagementApi";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { z } from "zod";
@@ -68,7 +68,6 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
   const [submitStatus, setSubmitStatus] = useState<"" | "success" | "error">(
     ""
   );
-  const [updateUser, { isLoading }] = useUpdateSingleUserMutation();
 
   /* =========================
      HANDLERS
@@ -108,7 +107,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
       profile: validated,
     };
     if (selectedUserId && payload) {
-      await updateUser({ id: selectedUserId, data: payload });
+      updateMockUserInStore(selectedUserId, payload);
     }
     toast.success("User profile updated successfully");
     handleClose();

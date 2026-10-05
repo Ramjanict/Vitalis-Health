@@ -7,7 +7,7 @@ import TopScannedFood from "@/components/nutrition/TopScannedFood";
 import DashboardSearch from "@/components/reuseable/DashboardSearch";
 import React from "react";
 
-const page = () => {
+const NutritionDatabasePage = () => {
   const [search, setSearch] = React.useState("");
   return (
     <div>
@@ -25,4 +25,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default NutritionDatabasePage;
